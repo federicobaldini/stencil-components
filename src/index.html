@@ -6,16 +6,51 @@
     <title>Stencil Component Starter</title>
     <script type="module" src="/build/stencil-components.esm.js"></script>
     <script nomodule src="/build/stencil-components.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+
+      .side-nav ul {
+        list-style: none;
+        padding: 0 16px;
+        margin: 0;
+      }
+
+      .side-nav li {
+        margin: 16px 0;
+      }
+
+      .side-nav a {
+        text-decoration: none;
+        color: #000000;
+      }
+    </style>
   </head>
   <body>
-    <wc-side-drawer title="The Side Drawer"></wc-side-drawer>
+    <wc-side-drawer title="The Side Drawer">
+      <nav class="side-nav">
+        <ul>
+          <li>
+            <a href="/">Link 1</a>
+          </li>
+          <li>
+            <a href="/">Link 2</a>
+          </li>
+          <li>
+            <a href="/">Link 3</a>
+          </li>
+        </ul>
+      </nav>
+    </wc-side-drawer>
     <script>
       const sideDrawer = document.querySelector('wc-side-drawer');
 
       if (sideDrawer) {
         setTimeout(() => {
           sideDrawer.title = 'Title changed!';
-        }, 1000);
+          sideDrawer.open = true;
+        }, 3000);
       }
     </script>
   </body>
