@@ -10,18 +10,15 @@ export class SideDrawer {
   @Prop({ reflect: true }) open: string;
 
   public render(): JSX.Element | null {
-    if (this.open) {
-      return (
-        <aside>
-          <header>
-            <h1>{this.title}</h1>
-          </header>
-          <main>
-            <slot></slot>
-          </main>
-        </aside>
-      );
-    }
-    return null;
+    return (
+      <aside class={`${this.open ? 'open' : ''}`}>
+        <header>
+          <h1>{this.title}</h1>
+        </header>
+        <main>
+          <slot></slot>
+        </main>
+      </aside>
+    );
   }
 }
