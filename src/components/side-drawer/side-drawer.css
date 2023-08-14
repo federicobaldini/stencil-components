@@ -1,12 +1,17 @@
 aside {
   position: fixed;
   top: 0;
-  left: 0;
+  left: -100%;
   width: 240px;
   max-width: 80%;
   height: 100vh;
   background: #f3f3f3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  transition: 0.5s linear;
+}
+
+aside.open {
+  left: 0;
 }
 
 header {
