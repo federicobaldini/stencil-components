@@ -28,6 +28,7 @@
     </style>
   </head>
   <body>
+    <button id="side-drawer-button">Open Side Menu</button>
     <wc-side-drawer title="The Side Drawer">
       <nav class="side-nav">
         <ul>
@@ -44,14 +45,14 @@
       </nav>
     </wc-side-drawer>
     <script>
+      const sideDrawerButton = document.querySelector('#side-drawer-button');
       const sideDrawer = document.querySelector('wc-side-drawer');
 
-      if (sideDrawer) {
-        setTimeout(() => {
-          sideDrawer.title = 'Title changed!';
+      sideDrawerButton.addEventListener('click', () => {
+        if (!sideDrawer.open) {
           sideDrawer.open = true;
-        }, 3000);
-      }
+        }
+      });
     </script>
   </body>
 </html>
