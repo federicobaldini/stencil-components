@@ -17,10 +17,26 @@ aside.open {
 header {
   padding: 16px;
   background: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 20px;
   color: #ffffff;
   margin: 0;
+}
+
+header button {
+  padding: 0;
+  color: #ffffff;
+  background: transparent;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+header button:focus {
+  outline: none;
 }
