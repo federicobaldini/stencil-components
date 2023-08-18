@@ -2,7 +2,7 @@ aside {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 240px;
+  width: 304px;
   max-width: 80%;
   height: 100vh;
   background: #f3f3f3;
@@ -39,4 +39,38 @@ header button {
 
 header button:focus {
   outline: none;
+}
+
+#tabs {
+  margin: 16px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#tabs button {
+  padding: 4px 0;
+  width: 30%;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s linear;
+}
+
+#tabs button.active,
+#tabs button:hover,
+#tabs button:active {
+  background: #000000;
+  color: #ffffff;
+}
+
+#tabs button:focus {
+  outline: none;
+}
+
+#contact-information {
+  padding: 0 16px;
 }
