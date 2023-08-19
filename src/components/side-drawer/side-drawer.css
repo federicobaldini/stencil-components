@@ -1,13 +1,14 @@
 aside {
   position: fixed;
   top: 0;
-  left: -100%;
+  left: -304px;
   width: 304px;
   max-width: 80%;
   height: 100vh;
   background: #f3f3f3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   transition: left 0.3s ease-out;
+  z-index: 11;
 }
 
 aside.open {
@@ -73,4 +74,22 @@ header button:focus {
 
 #contact-information {
   padding: 0 16px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+.backdrop.open {
+  opacity: 1;
+  pointer-events: all;
 }
