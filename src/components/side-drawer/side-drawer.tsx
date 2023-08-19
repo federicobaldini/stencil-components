@@ -38,7 +38,8 @@ export class SideDrawer {
       );
     }
 
-    return (
+    return [
+      <div class={`backdrop ${this.open ? 'open' : ''}`} onClick={this.open && this.closeHandler.bind(this)}></div>,
       <aside class={`${this.open ? 'open' : ''}`}>
         <header>
           <h1>{this.title}</h1>
@@ -53,7 +54,7 @@ export class SideDrawer {
           </button>
         </section>
         <main>{mainContent}</main>
-      </aside>
-    );
+      </aside>,
+    ];
   }
 }
