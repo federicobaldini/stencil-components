@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  border: 2px solid #3b013b;
+  margin: 32px 0;
+  padding: 16px;
+  width: 320px;
+}
+
+form input {
+  color: #3b013b;
+  padding: 4px;
+  display: block;
+  margin: 0 0 8px 0;
+}
+
+form input:focus,
+form button:focus {
+  outline: none;
+}
+
+form button {
+  padding: 5px 8px;
+  border: 1px solid #3b013b;
+  background: #3b013b;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.2s linear;
+}
+
+form button:hover,
+form button:active {
+  background: #750175;
+  border-color: #750175;
+}
