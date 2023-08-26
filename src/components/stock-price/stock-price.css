@@ -32,3 +32,10 @@ form button:active {
   background: #750175;
   border-color: #750175;
 }
+
+form button:disabled {
+  background: #cccccc;
+  border-color: #cccccc;
+  color: #000000;
+  cursor: not-allowed;
+}
