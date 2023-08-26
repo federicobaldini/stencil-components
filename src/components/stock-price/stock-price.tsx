@@ -7,44 +7,57 @@ import { AV_API_KEY } from '../../global/global';
   shadow: true,
 })
 export class StockPrice {
-  private stockSymbolElement: HTMLInputElement;
-
   @State() stockPrice: number;
+  @State() stockSymbol: string;
+  @State() stockSymbolValid: boolean;
+  @State() errorMessage: string;
 
-  private fetchStockPrice(stockSymbol: string): void {
-    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${AV_API_KEY}`)
+  private inputHandler(event: Event): void {
+    this.stockSymbol = (event.target as HTMLInputElement).value;
+
+    if (this.stockSymbol.trim() !== '') {
+      this.stockSymbolValid = true;
+    } else {
+      this.stockSymbolValid = false;
+    }
+  }
+
+  private fetchStockPrice(): void {
+    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${this.stockSymbol}&apikey=${AV_API_KEY}`)
       .then((response: Response): Promise<object> => {
+        if (response.status !== 200) {
+          throw new Error('Invalid Stock Symbol!');
+        }
+
         return response.json();
       })
       .then((parsedResponse: { 'Global Quote': { '05. price': number } }): void => {
+        if (!parsedResponse['Global Quote']['05. price']) {
+          throw new Error('Stock Symbol not found!');
+        }
+
         this.stockPrice = parsedResponse['Global Quote']['05. price'];
-        console.log(parsedResponse);
+        this.errorMessage = '';
       })
       .catch((error: Error): void => {
-        console.log(error);
+        this.errorMessage = error.message;
       });
   }
 
   private submitHandler(event: Event): void {
     event.preventDefault();
-    const stockSymbol: string = this.stockSymbolElement.value;
-    this.fetchStockPrice(stockSymbol);
+    this.fetchStockPrice();
   }
 
   public render(): JSX.Element | null {
     return [
       <form onSubmit={this.submitHandler.bind(this)}>
-        <input
-          id="stock-symbol"
-          ref={(inputElement: HTMLInputElement): void => {
-            this.stockSymbolElement = inputElement;
-          }}
-        />
-        <button type="submit">Fetch</button>
+        <input id="stock-symbol" value={this.stockSymbol} onInput={this.inputHandler.bind(this)} />
+        <button type="submit" disabled={!this.stockSymbolValid}>
+          Fetch
+        </button>
       </form>,
-      <div>
-        <p>Price: ${this.stockPrice}</p>
-      </div>,
+      <div>{this.errorMessage ? <p>{this.errorMessage}</p> : <p>Price: ${this.stockPrice}</p>}</div>,
     ];
   }
 }
