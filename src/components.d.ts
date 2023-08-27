@@ -11,6 +11,7 @@ export namespace Components {
         "title": string;
     }
     interface WcStockPrice {
+        "initialStockSymbol"?: string;
     }
 }
 declare global {
@@ -37,6 +38,7 @@ declare namespace LocalJSX {
         "title"?: string;
     }
     interface WcStockPrice {
+        "initialStockSymbol"?: string;
     }
     interface IntrinsicElements {
         "wc-side-drawer": WcSideDrawer;
