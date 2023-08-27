@@ -1,4 +1,4 @@
-import { h, Component, JSX, State } from '@stencil/core';
+import { h, Component, JSX, State, Prop } from '@stencil/core';
 import { AV_API_KEY } from '../../global/global';
 
 @Component({
@@ -12,6 +12,8 @@ export class StockPrice {
   @State() stockSymbolValid: boolean;
   @State() errorMessage: string;
 
+  @Prop() initialStockSymbol?: string;
+
   private inputHandler(event: Event): void {
     this.stockSymbol = (event.target as HTMLInputElement).value;
 
@@ -22,8 +24,8 @@ export class StockPrice {
     }
   }
 
-  private fetchStockPrice(): void {
-    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${this.stockSymbol}&apikey=${AV_API_KEY}`)
+  private fetchStockPrice(stockSymbol: string): void {
+    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${AV_API_KEY}`)
       .then((response: Response): Promise<object> => {
         if (response.status !== 200) {
           throw new Error('Invalid Stock Symbol!');
@@ -46,7 +48,13 @@ export class StockPrice {
 
   private submitHandler(event: Event): void {
     event.preventDefault();
-    this.fetchStockPrice();
+    this.fetchStockPrice(this.stockSymbol);
+  }
+
+  public componentDidLoad() {
+    if (this.initialStockSymbol) {
+      this.fetchStockPrice(this.initialStockSymbol);
+    }
   }
 
   public render(): JSX.Element | null {
