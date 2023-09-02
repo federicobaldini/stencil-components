@@ -1,4 +1,4 @@
-import { h, Component, JSX, State, Prop } from '@stencil/core';
+import { h, Component, JSX, State, Prop, Watch } from '@stencil/core';
 import { AV_API_KEY } from '../../global/global';
 
 @Component({
@@ -8,24 +8,32 @@ import { AV_API_KEY } from '../../global/global';
 })
 export class StockPrice {
   @State() stockPrice: number;
-  @State() stockSymbol: string;
-  @State() stockSymbolValid: boolean;
+  @State() stockInput: string;
+  @State() stockSymbolIsValid: boolean;
   @State() errorMessage: string;
 
-  @Prop() initialStockSymbol?: string;
+  @Prop({ reflect: true, mutable: true }) stockSymbol?: string;
 
-  private inputHandler(event: Event): void {
-    this.stockSymbol = (event.target as HTMLInputElement).value;
-
-    if (this.stockSymbol.trim() !== '') {
-      this.stockSymbolValid = true;
-    } else {
-      this.stockSymbolValid = false;
+  @Watch('stockSymbol')
+  initianlStockSymbolChanged(newValue: string, oldValue: string) {
+    if (newValue !== oldValue) {
+      this.stockInput = newValue;
+      this.fetchStockPrice();
     }
   }
 
-  private fetchStockPrice(stockSymbol: string): void {
-    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${stockSymbol}&apikey=${AV_API_KEY}`)
+  private inputHandler(event: Event): void {
+    this.stockInput = (event.target as HTMLInputElement).value;
+
+    if (this.stockSymbol.trim() !== '') {
+      this.stockSymbolIsValid = true;
+    } else {
+      this.stockSymbolIsValid = false;
+    }
+  }
+
+  private fetchStockPrice(): void {
+    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${this.stockSymbol}&apikey=${AV_API_KEY}`)
       .then((response: Response): Promise<object> => {
         if (response.status !== 200) {
           throw new Error('Invalid Stock Symbol!');
@@ -48,20 +56,22 @@ export class StockPrice {
 
   private submitHandler(event: Event): void {
     event.preventDefault();
-    this.fetchStockPrice(this.stockSymbol);
+    this.stockSymbol = this.stockInput;
   }
 
-  public componentDidLoad() {
-    if (this.initialStockSymbol) {
-      this.fetchStockPrice(this.initialStockSymbol);
+  public componentWillLoad(): void {
+    if (this.stockSymbol) {
+      this.stockInput = this.stockSymbol;
+      this.stockSymbolIsValid = true;
+      this.fetchStockPrice();
     }
   }
 
   public render(): JSX.Element | null {
     return [
       <form onSubmit={this.submitHandler.bind(this)}>
-        <input id="stock-symbol" value={this.stockSymbol} onInput={this.inputHandler.bind(this)} />
-        <button type="submit" disabled={!this.stockSymbolValid}>
+        <input id="stock-symbol" value={this.stockInput} onInput={this.inputHandler.bind(this)} />
+        <button type="submit" disabled={!this.stockSymbolIsValid}>
           Fetch
         </button>
       </form>,
