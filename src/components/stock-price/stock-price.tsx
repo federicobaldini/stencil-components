@@ -8,7 +8,7 @@ import { AV_API_KEY } from '../../global/global';
 })
 export class StockPrice {
   @State() stockPrice: number;
-  @State() stockInput: string;
+  @State() stockSymbolInput: string;
   @State() stockSymbolIsValid: boolean;
   @State() errorMessage: string;
 
@@ -17,13 +17,13 @@ export class StockPrice {
   @Watch('stockSymbol')
   initianlStockSymbolChanged(newValue: string, oldValue: string) {
     if (newValue !== oldValue) {
-      this.stockInput = newValue;
+      this.stockSymbolInput = newValue;
       this.fetchStockPrice();
     }
   }
 
-  private inputHandler(event: Event): void {
-    this.stockInput = (event.target as HTMLInputElement).value;
+  private inputHandler(event: InputEvent): void {
+    this.stockSymbolInput = (event.target as HTMLInputElement).value;
 
     if (this.stockSymbol.trim() !== '') {
       this.stockSymbolIsValid = true;
@@ -54,14 +54,14 @@ export class StockPrice {
       });
   }
 
-  private submitHandler(event: Event): void {
+  private submitHandler(event: SubmitEvent): void {
     event.preventDefault();
-    this.stockSymbol = this.stockInput;
+    this.stockSymbol = this.stockSymbolInput;
   }
 
   public componentWillLoad(): void {
     if (this.stockSymbol) {
-      this.stockInput = this.stockSymbol;
+      this.stockSymbolInput = this.stockSymbol;
       this.stockSymbolIsValid = true;
       this.fetchStockPrice();
     }
@@ -70,7 +70,7 @@ export class StockPrice {
   public render(): JSX.Element | null {
     return [
       <form onSubmit={this.submitHandler.bind(this)}>
-        <input id="stock-symbol" value={this.stockInput} onInput={this.inputHandler.bind(this)} />
+        <input id="stock-symbol" value={this.stockSymbolInput} onInput={this.inputHandler.bind(this)} />
         <button type="submit" disabled={!this.stockSymbolIsValid}>
           Fetch
         </button>
